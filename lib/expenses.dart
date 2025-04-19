@@ -59,7 +59,8 @@ class _ExpensesState extends State<Expenses> {
         action: SnackBarAction(
           label: "Undo",
           onPressed: () {
-            _expenseBox.putAt(index, expense);
+            //_expenseBox.putAt(index, expense);
+            _expenseBox.add(expense);
             // setState(() {
             //   _registeredExpenses.insert(expenseIndex, expense);
             // });
