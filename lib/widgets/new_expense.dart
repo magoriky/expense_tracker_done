@@ -27,8 +27,9 @@ class _NewExpenseState extends State<NewExpense> {
   Category _selectedCategory = Category.leisure;
 
   void _submitExpenseData() {
-    final enteredAmount =
-        double.tryParse(_numberController.text); // tryParse('hello') => null
+    final enteredAmount = double.tryParse(
+      _numberController.text,
+    ); // tryParse('hello') => null
     final amountIsInvalid = (enteredAmount == null || enteredAmount <= 0);
 
     if (_titleController.text.trim().isEmpty ||
@@ -36,19 +37,21 @@ class _NewExpenseState extends State<NewExpense> {
         _selectedDate == null) {
       showDialog(
         context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text("Invalid input"),
-          content: const Text(
-            "Please make sure a valid title, amount, date and category was entered",
-          ),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                },
-                child: const Text('ok'))
-          ],
-        ),
+        builder:
+            (ctx) => AlertDialog(
+              title: const Text("Invalid input"),
+              content: const Text(
+                "Please make sure a valid title, amount, date and category was entered",
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                  },
+                  child: const Text('ok'),
+                ),
+              ],
+            ),
       );
       return;
     }
@@ -105,28 +108,30 @@ class _NewExpenseState extends State<NewExpense> {
                   controller: _numberController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                    prefixText: '\$ ',
+                    //prefixText: '\$ ',
+                    prefixText: '₩ ',
                     label: Text("Amount"),
                   ),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
-                  child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    _selectedDate == null
-                        ? 'No Selected Date'
-                        : formatter.format(_selectedDate!),
-                  ), //*This line is a bit weird to understand but has a lot of sense.
-                  //* Check section 5 module 114 min 7:00
-                  IconButton(
-                    onPressed: _presentDatePicker,
-                    icon: const Icon(Icons.calendar_month),
-                  )
-                ],
-              ))
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      _selectedDate == null
+                          ? 'No Selected Date'
+                          : formatter.format(_selectedDate!),
+                    ), //*This line is a bit weird to understand but has a lot of sense.
+                    //* Check section 5 module 114 min 7:00
+                    IconButton(
+                      onPressed: _presentDatePicker,
+                      icon: const Icon(Icons.calendar_month),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -134,16 +139,15 @@ class _NewExpenseState extends State<NewExpense> {
             children: [
               DropdownButton(
                 value: _selectedCategory,
-                items: Category.values
-                    .map(
-                      (category) => DropdownMenuItem(
-                        value: category,
-                        child: Text(
-                          category.name.toUpperCase(),
-                        ),
-                      ),
-                    )
-                    .toList(),
+                items:
+                    Category.values
+                        .map(
+                          (category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category.name.toUpperCase()),
+                          ),
+                        )
+                        .toList(),
                 onChanged: (value) {
                   if (value == null) {
                     return;
@@ -163,9 +167,9 @@ class _NewExpenseState extends State<NewExpense> {
               ElevatedButton(
                 onPressed: _submitExpenseData,
                 child: const Text("Save expense"),
-              )
+              ),
             ],
-          )
+          ),
         ],
       ),
     );

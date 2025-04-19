@@ -2,8 +2,25 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:hive/hive.dart';
+import 'package:currency_converter_pro/currency_converter_pro.dart';
 
 part 'expense.g.dart';
+
+Future<double> convertKRWToUSD(double krwAmount) async {
+  try {
+    final converter = CurrencyConverterPro();
+    final result = await converter.convertCurrency(
+      amount: krwAmount,
+      fromCurrency: 'krw',
+      toCurrency: 'usd',
+    );
+    //print('Converted ₩$krwAmount → \$${result}');
+    return result;
+  } catch (e) {
+    //print('Currency conversion failed: $e');
+    return 0.0;
+  }
+}
 
 final formatter = DateFormat.yMd();
 const uuid = Uuid();
@@ -12,13 +29,10 @@ const uuid = Uuid();
 enum Category {
   @HiveField(0)
   food,
-
   @HiveField(1)
   travel,
-
   @HiveField(2)
   leisure,
-
   @HiveField(3)
   work,
 }
@@ -56,6 +70,10 @@ class Expense extends HiveObject {
 
   String get formattedDate {
     return formatter.format(date);
+  }
+
+  Future<double> get convertMoney async {
+    return await convertKRWToUSD(amount);
   }
 }
 
